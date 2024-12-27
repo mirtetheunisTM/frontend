@@ -7,13 +7,18 @@ import OrderDetail from './components/OrderDetail.vue'
 
 const routes = [
     { path: '/', component: OrderList },
-    { path: '/order/:id', component: OrderDetail },
+    { path: '/order/:id', component: OrderDetail, name: 'OrderDetail' },
 ]
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
 })
+
+router.beforeEach((to, from, next) => {
+    console.log('Navigating to:', to.fullPath);
+    next();
+  });
 
 const app = createApp(App)
 app.use(router)
