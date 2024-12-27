@@ -1,5 +1,20 @@
 import { createApp } from 'vue'
-import './style.css'
+// import './style.css'
 import App from './App.vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import OrderList from './components/OrderList.vue'
+import OrderDetail from './components/OrderDetail.vue'
 
-createApp(App).mount('#app')
+const routes = [
+    { path: '/', component: OrderList },
+    { path: '/order/:id', component: OrderDetail },
+]
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes,
+})
+
+const app = createApp(App)
+app.use(router)
+app.mount('#app')
