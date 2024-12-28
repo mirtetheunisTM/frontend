@@ -1,10 +1,10 @@
 <script setup>
-import OrderList from './components/OrderList.vue';
+
 </script>
 
 <template>
   <div>
-    <OrderList />
+    <router-view />
   </div>
 </template>
 

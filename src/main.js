@@ -8,6 +8,7 @@ import OrderDetail from './components/OrderDetail.vue'
 const routes = [
     { path: '/', component: OrderList },
     { path: '/order/:id', component: OrderDetail, name: 'OrderDetail' },
+    { path: '/test', component: OrderDetail },
 ]
 
 const router = createRouter({
