@@ -4,8 +4,10 @@ import App from './App.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import OrderList from './components/OrderList.vue'
 import OrderDetail from './components/OrderDetail.vue'
+import Login from './components/Login.vue'
 
 const routes = [
+    { path: '/login', component: Login},
     { path: '/', component: OrderList },
     { path: '/order/:id', component: OrderDetail, name: 'OrderDetail' },
     { path: '/test', component: OrderDetail },
