@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const orders = ref([]);
+const totalOrders = ref(0);
 const loading = ref(true);
 const error = ref('');
 const router = useRouter();;
@@ -33,6 +34,7 @@ onMounted(async () => {
         ...order,
         date: formatDate(order.date),
     }));
+    totalOrders.value = orders.value.length;
   } catch (err) {
     error.value = err.message;
   } finally {
@@ -72,11 +74,13 @@ function logout() {
 
 <template>
   <div class="order-list">
-    <h2>Bestellingen</h2>
-    <button @click="logout" class="logout-button">Log Out</button>
-    <button @click="$router.push('/change-password')" class="change-password-button">
-      Change Password
-    </button>
+    <h2>Dashboard</h2>
+    <div class="orders-counter">
+      <p v-if="loading">Loading...</p>
+      <p v-if="error" class="error">{{ error }}</p>
+      <p v-else>Total Orders: {{ totalOrders }}</p>
+    </div>
+    
     <div v-if="loading" class="loading">Loading...</div>
     <div v-if="error" class="error">{{ error }}</div>
     <ul v-else>

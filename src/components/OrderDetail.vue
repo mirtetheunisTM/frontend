@@ -49,7 +49,10 @@ async function updateOrderStatus() {
   try {
     const response = await fetch(`http://localhost:3000/api/v1/orders/${order.value._id}`, {
       method: 'PUT',
-      headers: [{ 'Content-Type': 'application/json' }, { 'Authorization': "Bearer " + localStorage.getItem('token') }],
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer " + localStorage.getItem('token') 
+    },
       body: JSON.stringify({ status: selectedStatus.value }),
     });
     if (!response.ok) {
