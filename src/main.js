@@ -5,11 +5,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 import OrderList from './components/OrderList.vue'
 import OrderDetail from './components/OrderDetail.vue'
 import Login from './components/Login.vue'
+import ChangePassword from './components/ChangePassword.vue'
 
 const routes = [
     { path: '/login', component: Login},
     { path: '/', component: OrderList },
     { path: '/order/:id', component: OrderDetail, name: 'OrderDetail' },
+    { path: '/change-password', component: ChangePassword },
     { path: '/test', component: OrderDetail },
 ]
 

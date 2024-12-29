@@ -43,11 +43,40 @@ onMounted(async () => {
 function goToOrderDetails(orderId) {
   router.push({ name: 'OrderDetail', params: { id: orderId }});
 }
+
+function logout() {
+    const token = localStorage.getItem('token');
+
+    fetch('http://localhost:3000/users/logout', {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.status === 'success') {
+                localStorage.removeItem('token');
+                alert('Logged out successfully');
+                router.push('/login');
+            } else {
+                alert('Failed to log out');
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            alert('An error occurred while logging out');
+        });
+}
 </script>
 
 <template>
   <div class="order-list">
     <h2>Bestellingen</h2>
+    <button @click="logout" class="logout-button">Log Out</button>
+    <button @click="$router.push('/change-password')" class="change-password-button">
+      Change Password
+    </button>
     <div v-if="loading" class="loading">Loading...</div>
     <div v-if="error" class="error">{{ error }}</div>
     <ul v-else>
@@ -141,5 +170,33 @@ ul {
   background-color: white; 
   color: black; 
   border: 2px solid #69FF47;
+}
+
+.logout-button,
+.change-password-button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.logout-button {
+  background-color: red;
+  color: white;
+}
+
+.logout-button:hover {
+  background-color: darkred;
+}
+
+.change-password-button {
+  background-color: #69ff47;
+  color: black;
+}
+
+.change-password-button:hover {
+  background-color: #45c934;
 }
 </style>
