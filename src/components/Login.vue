@@ -26,6 +26,8 @@ async function login() {
 
         if (response.ok) {
             alert('Login successful!');
+            let token = data.data.token;
+            localStorage.setItem('token', token);
             router.push('/');
         } else {
             error.value = data.message || 'Login failed. Please try again.';

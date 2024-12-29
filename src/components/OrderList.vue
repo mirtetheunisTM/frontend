@@ -20,7 +20,11 @@ function formatDate(dateString) {
 
 onMounted(async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/v1/orders');
+    const response = await fetch('http://localhost:3000/api/v1/orders', {
+      'headers': {
+        'Authorization': "Bearer " + localStorage.getItem('token')
+      }
+    });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
