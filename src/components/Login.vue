@@ -40,87 +40,49 @@ async function login() {
 </script>
 
 <template>
-  <div class="login-page">
-    <h1>Login</h1>
-    <form @submit.prevent="login" class="login-form">
-      <label for="username">Username</label>
-      <input
-        id="username"
-        type="text"
-        v-model="username"
-        placeholder="Enter your username"
-        required
-      />
-      <label for="password">Password</label>
-      <input
-        id="password"
-        type="password"
-        v-model="password"
-        placeholder="Enter your password"
-        required
-      />
-      <button type="submit" class="login-button">Login</button>
-      <p v-if="error" class="error-message">{{ error }}</p>
-    </form>
+  <div class="flex items-center justify-center min-h-screen bg-black">
+    <div class="w-full max-w-sm p-6 bg-black rounded-lg">
+      <div class="flex justify-center mb-8">
+        <img src="/SWEAR_Logo_white.png" alt="SWEAR Logo" class="h-12" />
+      </div>
+      <h1 class="text-center text-3xl font-bold text-customGreen text-400 mb-6">Login</h1>
+      <p v-if="error" class="text-center text-red-500">{{ error }}</p>
+      <form @submit.prevent="login" class="space-y-6">
+        <div>
+          <label for="username" class="mt-12 block text-white font-medium">Username</label>
+          <input
+            id="username"
+            type="text"
+            v-model="username"
+            placeholder="Enter your username"
+            class="w-full px-4 py-3 mt-2 text-black bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-customGreen"
+            required
+          />
+        </div>
+        <div>
+          <label for="password" class="block text-white font-medium">Password</label>
+          <input
+            id="password"
+            type="password"
+            v-model="password"
+            placeholder="Enter your password"
+            class="w-full px-4 py-3 mt-2 mb-8 text-black bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-customGreen"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          class="mt-8 w-9/12 mx-auto py-2 text-lg text-black bg-customGreen rounded-2xl hover:bg-white hover:border-2 hover:border-customGreen"
+        >
+          Login
+        </button>
+      </form>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.login-page {
-  font-family: Arial, sans-serif;
-  color: black;
-  background-color: white;
-  max-width: 400px;
-  margin: 100px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-  text-align: center;
-  font-size: 1.8rem;
-  margin-bottom: 20px;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-label {
-  font-size: 1rem;
-  font-weight: bold;
-}
-
-input {
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.login-button {
-  background-color: #69FF47;
-  color: black;
-  font-size: 1rem;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
-
-.login-button:hover {
-  background-color: #45c934;
-}
-
-.error-message {
-  color: red;
-  font-size: 0.9rem;
-  text-align: center;
+body {
+  font-family: 'Neue Haas Grotesk Display Pro', sans-serif;
 }
 </style>

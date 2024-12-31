@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-// import './style.css'
+import './style.css'
 import App from './App.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import OrderList from './components/OrderList.vue'
@@ -9,8 +9,12 @@ import ChangePassword from './components/ChangePassword.vue'
 import ProfilePage from './components/ProfilePage.vue'
 
 const routes = [
+    {
+        path: '/',
+        redirect: '/login',
+    },    
     { path: '/login', component: Login},
-    { path: '/', component: OrderList },
+    { path: '/dashboard', component: OrderList },
     { path: '/order/:id', component: OrderDetail, name: 'OrderDetail' },
     { path: '/change-password', component: ChangePassword },
     { path: '/profile', component: ProfilePage},
