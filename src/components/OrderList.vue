@@ -52,11 +52,11 @@ function goToOrderDetails(orderId) {
     <div v-if="loading" class="text-center text-lg">Loading...</div>
     <div v-if="error" class="text-center text-red-500">{{ error }}</div>
 
-    <ul v-else class="w-full max-w-5xl space-y-4 space-x-4">
+    <ul v-else class="grid grid-cols-1 gap-5 w-full max-w-5xl">
       <li 
         v-for="order in orders" 
         :key="order._id" 
-        class="flex justify-between items-center bg-customGray text-white rounded-3xl p-5"
+        class="flex justify-between items-center bg-customGray text-white rounded-3xl p-5 w-full box-border"
       >
         <div>
           <p class="mb-1 text-customGreen text-2xl font-semibold">{{ order.name }}</p>
