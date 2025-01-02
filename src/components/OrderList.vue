@@ -52,22 +52,22 @@ function goToOrderDetails(orderId) {
     <div v-if="loading" class="text-center text-lg">Loading...</div>
     <div v-if="error" class="text-center text-red-500">{{ error }}</div>
 
-    <ul v-else class="w-full max-w-5xl space-y-4">
+    <ul v-else class="w-full max-w-5xl space-y-4 space-x-4">
       <li 
         v-for="order in orders" 
         :key="order._id" 
-        class="flex justify-between items-center bg-customGray text-white rounded-2xl p-5 shadow-[4px_4px_8px_rgba(105,255,71,0.25)]"
+        class="flex justify-between items-center bg-customGray text-white rounded-3xl p-5"
       >
         <div>
           <p class="mb-1 text-customGreen text-2xl font-semibold">{{ order.name }}</p>
           <p class="mb-3 text-sm text-gray-400">{{ order.date }}</p>
-          <p class="text-md text-white">{{ order.items.length }} items</p>
+          <p class="text-md text-white">{{ order.items.length }} items - {{ order.status }}</p>
         </div>
         <div 
-          class="w-8 h-8 flex justify-center items-center rounded-full bg-customGreen cursor-pointer"
+          class="w-8 h-8 flex justify-center items-center cursor-pointer"
           @click="goToOrderDetails(order._id)"
         >
-          <span class="text-black">&gt;</span>
+          <img src="../assets/chevron-right.svg" alt="See Details" class="filter w-8 h-8" style="filter: invert(76%) sepia(78%) saturate(433%) hue-rotate(52deg) brightness(98%) contrast(106%);">
         </div>
       </li>
     </ul>

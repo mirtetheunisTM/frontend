@@ -5,14 +5,14 @@ import { useRoute, useRouter } from 'vue-router';
 const order = ref(null);
 const error = ref('');
 const loading = ref(true);
-const newStatus = ref('');
+// const newStatus = ref('');
 const selectedStatus = ref('');
 const statusOptions = ['in productie', 'verzonden', 'geleverd', 'geannuleerd', 'teruggestuurd'];
 
 const route = useRoute();
 const router = useRouter();
 
-function formatDate(dateString) {
+ function formatDate(dateString) {
   const date = new Date(dateString);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -20,10 +20,12 @@ function formatDate(dateString) {
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
   return `${year}-${month}-${day} ${hours}:${minutes}`;
-}
+} 
 
 onMounted(async () => {
+  console.log("onMounted");
   try {
+    console.log("Route param: " + route.params.id);
     const response = await fetch(`http://localhost:3000/api/v1/orders/${route.params.id}`, {
       'headers': {
         'Authorization': "Bearer " + localStorage.getItem('token')
@@ -45,7 +47,7 @@ onMounted(async () => {
   }
 });
 
-async function updateOrderStatus() {
+ async function updateOrderStatus() {
   try {
     const response = await fetch(`http://localhost:3000/api/v1/orders/${order.value._id}`, {
       method: 'PUT',
@@ -66,7 +68,7 @@ async function updateOrderStatus() {
   }
 }
 
-async function deleteOrder() {
+ async function deleteOrder() {
   try {
     const response = await fetch(`http://localhost:3000/api/v1/orders/${order.value._id}`, {
       method: 'DELETE',
@@ -87,142 +89,116 @@ console.log(order);
 </script>
 
 <template>
-  <div class="order-detail">
-    <h1>Details Bestelling</h1>
-    <p v-if="loading">Loading...</p>
-    <p v-if="error" class="error">{{ error }}</p>
-    <div v-if="order">
-      <div class="order-info">
-        <h2>Bestelling ID: {{ order._id }}</h2>
-        <p><strong>Datum:</strong> {{ order.date }}</p>
-        <div class="status-section">
-          <p><strong>Status:</strong></p>
-          <select v-model="selectedStatus" class="status-dropdown">
-            <option v-for="option in statusOptions" :key="option" :value="option">
-              {{ option }}
-            </option>
-          </select>
-          <button @click="updateOrderStatus" class="update-button">Update</button>
+  <div class="bg-black min-h-screen flex justify-center items-start py-10 text-white">
+    <div v-if="loading" class="text-center text-gray-400 text-xl">
+      Loading...
+    </div>
+
+    <div v-else-if="error" class="text-center text-red-500 text-xl">
+      {{ error }}
+    </div>
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl w-full mt-10">
+      <!-- Left Column -->
+      <div>
+        <!-- Order ID and Date -->
+        <div class="mb-20">
+          <h2 class="mb-4 text-customGreen font-bold text-2xl">Order ID: {{ order?._id || 'XX'}}</h2>
+          <p class="text-gray-400 text-sm">{{ order?.date || 'XX' }}</p>
+        </div>
+
+        <!-- Customer Details -->
+        <div class="mb-20">
+          <h3 class="text-customGreen font-bold text-2xl">Customer Details</h3>
+          <p class="mt-4 mb-2"><strong>Name:</strong> {{ order?.name || 'XX' }}</p>
+          <p class="mb-2"><strong>Email:</strong> {{ order?.email || 'XX' }}</p>
+          <p>
+            <strong>Address:</strong> {{ order?.address || 'XX' }}, {{ order?.city || 'XX' }}, {{ order?.state || 'XX-' }}
+          </p>
+        </div>
+
+        <!-- Order Status -->
+        <div class="mb-6">
+          <h3 class="text-customGreen font-bold text-2xl">Status</h3>
+          <div class="flex items-center mt-2 space-x-3">
+            <select
+              v-model="selectedStatus"
+              class="bg-customGray text-white px-4 py-2 rounded-3xl border border-gray-600"
+            >
+              <option
+                v-for="option in statusOptions"
+                :key="option"
+                :value="option"
+              >
+                {{ option }}
+              </option>
+            </select>
+            <button
+              @click="updateOrderStatus"
+              class="bg-customGreen text-black px-4 py-2 rounded-3xl"
+            >
+              Update
+            </button>
+          </div>
+
+          <!-- Back Button -->
+          <div class="mt-10 flex justify-start">
+            <button
+              @click="router.push('/dashboard')"
+              class="flex items-center mt-24 px-4 py-2 border border-gray-400 text-gray-400 rounded-3xl hover:bg-customGreen hover:text-black transition hover:border-customGreen"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="w-5 h-5 mr-2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Back
+            </button>
+          </div>
         </div>
       </div>
-      <div class="customer-info">
-        <h3>Customer Information</h3>
-        <p><strong>Naam:</strong> {{ order.name }}</p>
-        <p><strong>Email:</strong> {{ order.email }}</p>
-        <p><strong>Adres:</strong> {{ order.address }}, {{ order.city }}, {{ order.state }}</p>
-      </div>
-      <div class="ordered-items">
-        <h3>Producten</h3>
-        <ul>
-          <li v-for="item in order.items" :key="item._id">
-            <p><strong>Product:</strong> schoen </p>
-            <p><strong>Quantity:</strong> 1 </p>
-            <p><strong>Price:</strong> €40</p>
-            <p><strong>Total:</strong> €40</p>
-          </li>
-        </ul>
-      </div>
-      <div class="order-summary">
-        <h3>Totaal bedrag</h3>
-        <p><strong>€{{ order.total }}</strong></p>
-      </div>
-      <div class="actions">
-        <button @click="deleteOrder" class="delete-button">Verwijder bestelling</button>
+
+      <!-- Right Column -->
+      <div>
+        <!-- Products -->
+        <div class="mb-6">
+          <h3 class="text-customGreen font-bold text-2xl">Products</h3>
+           <div
+            v-for="item in order.items"
+            class="bg-customGray p-4 rounded-3xl shadow-lg mt-8"
+          >
+            <h4 class="font-bold text-white text-lg">{{ item.name }}</h4>
+            <p class="text-gray-400 text-sm mt-1">Color laces: (placeholder)</p>
+            <p class="text-gray-400 text-sm mt-1">Color inside: (placeholder)</p>
+            <p class="text-gray-400 text-sm mt-1">Color outside: (placeholder)</p>
+            <p class="text-gray-400 text-sm mt-1">Material: (placeholder)</p>
+            <p class="text-gray-400 text-sm mt-1">Text: (placeholder)</p>
+            <p class="text-white font-bold text-right mt-4">€{{ item.price }}</p>
+          </div>
+        </div> 
+
+        <!-- Delete Order Button -->
+        <div class="mt-6 flex justify-end">
+          <button
+            @click="deleteOrder"
+            class="mt-20 bg-red-800 text-white px-4 py-2 rounded-3xl w-15 hover:bg-red-700"
+          >
+            Delete Order
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.order-detail {
-  font-family: Arial, sans-serif;
-  color: black;
-  background-color: white;
-  padding: 20px;
-  max-width: 800px;
-  margin: auto;
-}
 
-h1 {
-  text-align: center;
-  color: black;
-}
-
-.order-info, .customer-info, .ordered-items, .order-summary, .actions {
-  margin-bottom: 20px;
-}
-
-h2, h3 {
-  color: #69FF47;
-}
-
-.error {
-  color: #871614;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  background-color: black;
-  color: white;
-  padding: 15px 30px;
-  margin-bottom: 10px;
-  border-radius: 40px;
-}
-
-.status-input {
-  padding: 8px;
-  margin-right: 10px;
-}
-
-.status-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.status-dropdown {
-  padding: 5px;
-  font-size: 1rem;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-.update-button, .delete-button {
-  padding: 8px 15px;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 40px;
-  cursor: pointer;
-}
-
-.update-button {
-  background-color: #69FF47;
-  color: black;
-  margin-left: 30px;
-  border: 2px solid #69FF47;
-}
-
-.delete-button {
-  background-color: #871614;
-  color: white;
-  margin-top: 20px;
-  border: 2px solid #871614;
-}
-
-.update-button:hover {
-  background-color: white;
-  color: black;
-  border: 2px solid #69FF47;
-}
-
-.delete-button:hover {
-  background-color: white;
-  color: #871614;
-  border: 2px solid #871614;
-}
 </style>

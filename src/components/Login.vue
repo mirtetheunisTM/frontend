@@ -28,7 +28,7 @@ async function login() {
             alert('Login successful!');
             let token = data.data.token;
             localStorage.setItem('token', token);
-            router.push('/');
+            router.push('/dashboard');
         } else {
             error.value = data.message || 'Login failed. Please try again.';
         }
@@ -55,7 +55,7 @@ async function login() {
             type="text"
             v-model="username"
             placeholder="Enter your username"
-            class="w-full px-4 py-3 mt-2 text-black bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-customGreen"
+            class="w-full px-4 py-3 mt-2 text-black bg-white rounded-3xl focus:outline-none focus:ring-2 focus:ring-customGreen"
             required
           />
         </div>
@@ -66,13 +66,13 @@ async function login() {
             type="password"
             v-model="password"
             placeholder="Enter your password"
-            class="w-full px-4 py-3 mt-2 mb-8 text-black bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-customGreen"
+            class="w-full px-4 py-3 mt-2 mb-8 text-black bg-white rounded-3xl focus:outline-none focus:ring-2 focus:ring-customGreen"
             required
           />
         </div>
         <button
           type="submit"
-          class="mt-8 w-9/12 mx-auto py-2 text-lg text-black bg-customGreen rounded-2xl hover:bg-white hover:border-2 hover:border-customGreen"
+          class="flex justify-center mt-8 w-28 mx-auto py-2 text-lg text-black bg-customGreen rounded-3xl hover:bg-white hover:border-2 hover:border-customGreen"
         >
           Login
         </button>

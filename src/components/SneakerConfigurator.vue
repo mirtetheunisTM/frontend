@@ -50,7 +50,6 @@
   
         gltfLoader.load(
           "/shoe.glb", 
-          console.log("Stap 1 done"),
           (gltf) => {
             console.log(gltf);
             console.log(gltf.scene);
@@ -71,12 +70,12 @@
           
         );
 
-        // Ground plane
+        /* Ground plane
         const planeGeometry = new THREE.PlaneGeometry(10, 10);
         const planeMaterial = new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
         const plane = new THREE.Mesh(planeGeometry, planeMaterial);
         plane.rotation.x = -Math.PI / 2; 
-        scene.add(plane);
+        scene.add(plane); */
 
   
         camera.position.set(0, 1, 5);
