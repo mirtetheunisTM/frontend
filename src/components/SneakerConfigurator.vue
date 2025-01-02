@@ -49,7 +49,7 @@
         gltfLoader.setDRACOLoader(dracoLoader);
   
         gltfLoader.load(
-          "shoe.glb", 
+          "/shoe.glb", 
           console.log("Stap 1 done"),
           (gltf) => {
             console.log(gltf);
