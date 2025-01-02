@@ -14,7 +14,7 @@ function goToProfile() {
       src="../../public/SWEAR_Logo_white.png"
       alt="Swear Logo"
       class="logo"
-      @click="$router.push('/')"
+      @click="$router.push('/dashboard')"
     />
     <button class="profile-button" @click="goToProfile">
       Profile
