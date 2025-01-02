@@ -34,54 +34,33 @@ function logout() {
 </script>
 
 <template>
-  <div class="profile-page">
-    <h1>Profile</h1>
-    <button @click="changePassword" class="profile-button">
-      Change Password
-    </button>
-    <button @click="logout" class="logout-button">
-      Logout
-    </button>
+  <div class="bg-black min-h-screen flex flex-col items-center text-center">
+    <!-- Page Title and Description -->
+    <div class="mt-10">
+      <h1 class="text-customGreen text-4xl font-bold mb-4 mt-8">Profile</h1>
+      <p class="text-gray-400 text-lg p-2">
+        You are logged in as an Admin and therefore you have access to the Dashboard and Order Overviews.
+      </p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex flex-col items-center mt-40 mb-auto">
+      <button 
+        @click="changePassword" 
+        class="mb-8 bg-customGreen text-black px-6 py-3 rounded-3xl text-lg font-semibold hover:bg-green-600 transition"
+      >
+        Change Password
+      </button>
+      <button 
+        @click="logout" 
+        class="bg-red-800 text-white px-6 py-3 rounded-3xl text-lg font-semibold hover:bg-red-700 transition"
+      >
+        Logout
+      </button>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.profile-page {
-  font-family: Arial, sans-serif;
-  max-width: 400px;
-  margin: 50px auto;
-  text-align: center;
-}
 
-h1 {
-  margin-bottom: 30px;
-}
-
-.profile-button,
-.logout-button {
-  margin: 10px 0;
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.profile-button {
-  background-color: #69ff47;
-  color: black;
-}
-
-.profile-button:hover {
-  background-color: #45c934;
-}
-
-.logout-button {
-  background-color: red;
-  color: white;
-}
-
-.logout-button:hover {
-  background-color: darkred;
-}
 </style>
