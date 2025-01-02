@@ -7,6 +7,7 @@ import OrderDetail from './components/OrderDetail.vue'
 import Login from './components/Login.vue'
 import ChangePassword from './components/ChangePassword.vue'
 import ProfilePage from './components/ProfilePage.vue'
+import SneakerConfigurator from './components/SneakerConfigurator.vue'
 
 const routes = [
     {
@@ -18,7 +19,7 @@ const routes = [
     { path: '/order/:id', component: OrderDetail, name: 'OrderDetail' },
     { path: '/change-password', component: ChangePassword },
     { path: '/profile', component: ProfilePage},
-    { path: '/test', component: OrderDetail },
+    { path: '/shop', component: SneakerConfigurator}
 ]
 
 const router = createRouter({
