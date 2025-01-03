@@ -324,6 +324,30 @@
             rotateAnimation.pause();
           }
         })
+
+        // Add skateboard
+        const skateboardLoader = new GLTFLoader();
+        skateboardLoader.load('/skateboard.glb', (gltf) => {
+          const skateboard = gltf.scene;
+
+          skateboard.scale.set(2.5, 2.5, 2.5);
+          skateboard.position.set(0, 0.54, 0);
+          scene.add(skateboard);
+          skateboard.visible = false;
+
+          // Only show when toggle is on
+          document.getElementById('skateboard').addEventListener('click', (event) => {
+            if (this.toggles['skateboard']) {
+              skateboard.visible = true;
+              pedestal.visible = false;
+            } else {
+              skateboard.visible = false;
+              pedestal.visible = true;
+            }
+          })
+        });
+
+        
   
         // Animation
         const animate = () => {
