@@ -44,6 +44,7 @@
         <div class="mb-6">
           <p class="font-semibold mb-3">Give it a name</p>
           <input
+            id="shoeName"
             type="text"
             placeholder="Enter name"
             class="w-full py-2 px-4 rounded-3xl bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-customGreen"
@@ -91,6 +92,9 @@
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
   import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
+  import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
+  import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+
   
   export default {
     name: "SneakerConfigurator",
@@ -256,6 +260,46 @@
             }
           }
       });
+
+        // Add text
+        const loader = new FontLoader();
+        let textMesh = null;
+        
+        loader.load('/fonts/Space Grotesk Medium_Regular.json', (font) => {
+          const nameInput = document.getElementById('shoeName');
+          nameInput.addEventListener('input', () => {
+            const shoeName = nameInput.value;
+
+            if (textMesh) {
+              scene.remove(textMesh);
+              textMesh.geometry.dispose();
+              textMesh.material.dispose();
+              textMesh = null;
+            }
+
+            if (shoeName.trim() !== '') {
+              const textGeometry = new TextGeometry(shoeName, {
+                font: font,
+                size: 0.1,
+                height: 0.01,
+                curveSegments: 12,
+                bevelEnabled: true,
+                bevelThickness: 0.01,
+                bevelSize: 0.01,
+                bevelOffset: 0,
+                bevelSegments: 5,
+              });
+
+              const textMaterial = new THREE.MeshStandardMaterial({
+                color: 0xffffff, });
+              textMesh = new THREE.Mesh(textGeometry, textMaterial);
+
+              textMesh.position.set(1.5, 1.25, 0);
+              textMesh.rotation.set(0, -Math.PI / 2, 0);
+              scene.add(textMesh);
+            }
+          });
+        });
   
         // Animation
         const animate = () => {
