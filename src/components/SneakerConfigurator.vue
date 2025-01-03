@@ -33,6 +33,7 @@
               v-for="(material, index) in materials"
               :key="index"
               class="bg-gray-700 py-2 px-4 rounded-3xl text-white hover:bg-customGreen hover:text-black transition duration-300"
+              @click="applyMaterial(material)"
             >
               {{ material }}
             </button>
@@ -116,7 +117,7 @@
         "#000763",
         "#E073BF",
         ],
-        materials: ["Fabric", "Leather", "Rubber"],
+        materials: ["White Fabric", "Black Fabric", "Brown Leather", "Black Suede Leather"],
         toggles: {
           rotateShoe: false,
           skateboard: false,
@@ -286,6 +287,45 @@
           }
         }
       },
+
+      applyMaterial(material) {
+        if (this.currentIntersect && this.updatableParts.includes(this.currentIntersect.object.name)) {
+          const textureLoader = new THREE.TextureLoader();
+          let texturePath = '';
+          let materialLabel = '';
+
+          // Determine the texture path and material label
+          switch (material) {
+            case 'White Fabric':
+              texturePath = '/materials/white_fabric.jpg';
+              materialLabel = 'whiteFabric';
+              break;
+            case 'Brown Leather':
+              texturePath = '/materials/leather.jpg';
+              materialLabel = 'leather';
+              break;
+            case 'Black Fabric':
+              texturePath = '/materials/black_fabric.jpg';
+              materialLabel = 'blackFabric';
+              break;
+            case 'Black Suede Leather':
+              texturePath = '/materials/suede.jpg';
+              materialLabel = 'suede';
+              break;
+            default:
+              console.error('Unknown material:', material);
+              return;
+          }
+
+          const texture = textureLoader.load(texturePath);
+          const newMaterial = new THREE.MeshStandardMaterial({ map: texture });
+          
+          this.currentIntersect.object.material = newMaterial;
+          this.partMaterials[this.currentIntersect.object.name] = materialLabel;
+
+          console.log(`Applied ${materialLabel} material to ${this.currentIntersect.object.name}`);
+        }
+     },
     },
   };
   </script>
