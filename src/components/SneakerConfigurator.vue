@@ -333,6 +333,7 @@
           skateboard.scale.set(2.5, 2.5, 2.5);
           skateboard.position.set(0, 0.54, 0);
           scene.add(skateboard);
+          rotateGroup.add(skateboard);
           skateboard.visible = false;
 
           // Only show when toggle is on
