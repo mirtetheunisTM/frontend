@@ -90,7 +90,6 @@
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
   import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
-  import HeaderShop from "./HeaderShop.vue";
   
   export default {
     name: "SneakerConfigurator",
@@ -175,7 +174,8 @@
           color: 0x555555, 
         });
         const pedestal = new THREE.Mesh(pedestalGeometry, pedestalMaterial);
-        pedestal.position.y = -1;
+        pedestal.position.y = -0.25;
+        pedestal.rotation.set(0, -Math.PI / 2, 0);
         pedestal.receiveShadow = true;
         scene.add(pedestal);
   
@@ -203,6 +203,8 @@
             });
 
             model.scale.set(10,10,10);
+            model.position.set(0, 0.75, 0);
+            model.rotation.set(0, -Math.PI / 2, 0);
             scene.add(model);
           }
           
