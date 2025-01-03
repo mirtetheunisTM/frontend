@@ -53,6 +53,16 @@
         const pointLight = new THREE.PointLight(0xffffff, 0.8);
         pointLight.position.set(0, 5, 0);
         scene.add(pointLight);
+
+        // Pedestal
+        const pedestalGeometry = new THREE.BoxGeometry(3, 1.5, 5);
+        const pedestalMaterial = new THREE.MeshStandardMaterial({
+          color: 0x555555, 
+        });
+        const pedestal = new THREE.Mesh(pedestalGeometry, pedestalMaterial);
+        pedestal.position.y = -1;
+        pedestal.receiveShadow = true;
+        scene.add(pedestal);
   
         // Load model
         const gltfLoader = new GLTFLoader();
