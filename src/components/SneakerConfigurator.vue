@@ -281,6 +281,12 @@
       selectColor(selectedColor) {
         if(this.currentIntersect && this.updatableParts.includes(this.currentIntersect.object.name)) {
           const material = this.currentIntersect.object.material;
+
+          if (this.partMaterials[this.currentIntersect.object.name] && ["whiteFabric", "blackFabric", "leather", "suede"].includes(this.partMaterials[this.currentIntersect.object.name])) {
+            material.map = null; // Remove the texture
+            material.needsUpdate = true;
+          }
+
           if (material && material.color) {
             material.color.set(selectedColor);
             this.partColors[this.currentIntersect.object.name] = material.color.getHex();
@@ -317,9 +323,15 @@
               return;
           }
 
+          // Remove color
+          const currentMaterial = this.currentIntersect.object.material;
+          if (currentMaterial && currentMaterial.color) {
+            currentMaterial.color.set(0xffffff);
+          }
+
           const texture = textureLoader.load(texturePath);
           const newMaterial = new THREE.MeshStandardMaterial({ map: texture });
-          
+
           this.currentIntersect.object.material = newMaterial;
           this.partMaterials[this.currentIntersect.object.name] = materialLabel;
 
