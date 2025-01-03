@@ -280,22 +280,17 @@
             if (shoeName.trim() !== '') {
               const textGeometry = new TextGeometry(shoeName, {
                 font: font,
-                size: 0.1,
-                height: 0.01,
+                size: 0.06,
+                height: 0.02,
                 curveSegments: 12,
-                bevelEnabled: true,
-                bevelThickness: 0.01,
-                bevelSize: 0.01,
-                bevelOffset: 0,
-                bevelSegments: 5,
               });
 
               const textMaterial = new THREE.MeshStandardMaterial({
-                color: 0xffffff, });
+                color: 0x000000, });
               textMesh = new THREE.Mesh(textGeometry, textMaterial);
 
-              textMesh.position.set(1.5, 1.25, 0);
-              textMesh.rotation.set(0, -Math.PI / 2, 0);
+              textMesh.position.set(1.1, 1.35, 0.2);
+              textMesh.rotation.set(0, Math.PI / 2, 0);
               scene.add(textMesh);
             }
           });
