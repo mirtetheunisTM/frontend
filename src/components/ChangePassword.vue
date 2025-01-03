@@ -44,94 +44,65 @@ async function changePassword() {
 </script>
 
 <template>
-  <div class="change-password">
-    <h1>Change Password</h1>
-    <form @submit.prevent="changePassword" class="change-password-form">
-      <label for="oldPassword">Old Password</label>
-      <input
-        id="oldPassword"
-        type="password"
-        v-model="oldPassword"
-        placeholder="Enter your old password"
-        required
-      />
-      <label for="newPassword">New Password</label>
-      <input
-        id="newPassword"
-        type="password"
-        v-model="newPassword"
-        placeholder="Enter your new password"
-        required
-      />
-      <button type="submit" class="change-password-button">Change Password</button>
-      <p v-if="error" class="error-message">{{ error }}</p>
-      <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
+  <div class="bg-black min-h-screen flex flex-col justify-center items-center py-10">
+    <!-- Page Title -->
+    <h1 class="text-customGreen text-4xl font-bold mb-20 -mt-10">Change Password</h1>
+
+    <!-- Form -->
+    <form 
+      @submit.prevent="changePassword" 
+      class="bg-customGray p-6 py-10 rounded-3xl shadow-lg w-full max-w-md text-center"
+    >
+
+      <!-- Error Message -->
+      <p v-if="error" class="mt-4 mb-8 text-red-800 text-sm">{{ error }}</p>
+      <p v-if="successMessage" class="mt-4 mb-8 text-customGreen text-sm">{{ successMessage }}</p>
+
+      <!-- Old Password -->
+      <div class="mb-8">
+        <label for="oldPassword" class="block text-white font-semibold mb-2">Old Password</label>
+        <input 
+          id="oldPassword" 
+          type="password" 
+          v-model="oldPassword" 
+          placeholder="Enter your old password" 
+          class="w-full px-4 py-2 rounded-3xl bg-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"
+          required 
+        />
+      </div>
+
+      <!-- New Password -->
+      <div class="mb-10">
+        <label for="newPassword" class="block text-white font-semibold mb-2">New Password</label>
+        <input 
+          id="newPassword" 
+          type="password" 
+          v-model="newPassword" 
+          placeholder="Enter your new password" 
+          class="w-full px-4 py-2 rounded-3xl bg-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"
+          required 
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        class="w-full bg-customGreen text-black px-3 py-2 rounded-3xl text-lg font-semibold hover:bg-green-600 transition"
+      >
+        Change Password
+      </button>
     </form>
-    <button @click="$router.push('/')" class="back-button">Back to Dashboard</button>
+
+    <!-- Back Button -->
+    <button 
+      @click="$router.push('/dashboard')" 
+      class="mt-8 bg-customGray text-gray-300 px-4 py-2 rounded-3xl text-lg font-semibold hover:bg-customGreen hover:text-black transition"
+    >
+      Back to Dashboard
+    </button>
   </div>
 </template>
 
 <style scoped>
-.change-password {
-  font-family: Arial, sans-serif;
-  max-width: 400px;
-  margin: 50px auto;
-  text-align: center;
-}
 
-.change-password-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-label {
-  font-weight: bold;
-}
-
-input {
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.change-password-button {
-  background-color: #69ff47;
-  color: black;
-  font-size: 1rem;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.change-password-button:hover {
-  background-color: #45c934;
-}
-
-.back-button {
-  margin-top: 20px;
-  background-color: #ccc;
-  color: black;
-  padding: 10px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.back-button:hover {
-  background-color: #aaa;
-}
-
-.error-message {
-  color: red;
-  font-size: 0.9rem;
-}
-
-.success-message {
-  color: green;
-  font-size: 0.9rem;
-}
 </style>
