@@ -1,15 +1,131 @@
 <template>
-    <div ref="threeCanvas" class="three-canvas"></div>
-  </template>
+  <div class="flex flex-col min-h-screen bg-black text-white">
+    <!-- Main Content -->
+    <div class="flex flex-grow">
+      <!-- Three.js Canvas -->
+      <div ref="threeCanvas" class="flex-1">
+        <!-- This is the Three.js canvas area -->
+      </div>
+
+      <!-- Customization Sidebar -->
+      <div class="w-[400px] p-6 bg-black">
+        <h2 class="text-xl font-bold mb-6 text-customGreen">Customize your sneaker</h2>
+
+        <!-- Color Options -->
+        <div class="mb-6">
+          <p class="font-semibold mb-3">Choose a color</p>
+          <div class="grid grid-cols-5 gap-4">
+            <div
+              v-for="(color, index) in colorOptions"
+              :key="index"
+              :style="{ backgroundColor: color }"
+              class="w-10 h-10 rounded-full border-2 border-white cursor-pointer hover:border-customGreen"
+              @click="selectColor(color)"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Material Options -->
+        <div class="mb-6">
+          <p class="font-semibold mb-3">Choose a material</p>
+          <div class="flex flex-col gap-4">
+            <button
+              v-for="(material, index) in materials"
+              :key="index"
+              class="bg-gray-700 py-2 px-4 rounded-3xl text-white hover:bg-customGreen hover:text-black transition duration-300"
+            >
+              {{ material }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Name Input -->
+        <div class="mb-6">
+          <p class="font-semibold mb-3">Give it a name</p>
+          <input
+            type="text"
+            placeholder="Enter name"
+            class="w-full py-2 px-4 rounded-3xl bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-customGreen"
+          />
+        </div>
+
+        <!-- Toggles -->
+        <div class="mb-6">
+          <p class="font-bold mb-2 text-customGreen text-xl">Change settings</p>
+          <div class="flex items-center justify-between mb-4">
+            <span>Rotate shoe</span>
+            <button
+              class="w-14 h-8 bg-gray-700 rounded-full flex items-center justify-start p-1"
+              :class="{'justify-end': toggles.rotateShoe}"
+              @click="toggle('rotateShoe')"
+            >
+              <div class="w-6 h-6 bg-white rounded-full"></div>
+            </button>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>Skateboard</span>
+            <button
+              class="w-14 h-8 bg-gray-700 rounded-full flex items-center justify-start p-1"
+              :class="{'justify-end': toggles.skateboard}"
+              @click="toggle('skateboard')"
+            >
+              <div class="w-6 h-6 bg-white rounded-full"></div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Order Button -->
+        <button
+          class="w-full mt-8 py-2 px-4 bg-customGreen rounded-3xl text-black font-bold hover:bg-green-600"
+        >
+          Order
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
   
   <script>
   import * as THREE from "three";
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
   import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
+  import HeaderShop from "./HeaderShop.vue";
   
   export default {
     name: "SneakerConfigurator",
+    data() {
+      return {
+        updatableParts: [
+          "inside",
+          "laces",
+          "outside_1",
+          "outside_2",
+          "outside_3",
+          "sole_bottom",
+          "sole_top",
+        ],
+        colorOptions: [
+        "#000000",
+        "#FFFFFF",
+        "#C90000",
+        "#D85700",
+        "#D1CE04",
+        "#69FF47",
+        "#00821C",
+        "#4EB7D4",
+        "#000763",
+        "#E073BF",
+        ],
+        materials: ["Fabric", "Leather", "Rubber"],
+        toggles: {
+          rotateShoe: false,
+          skateboard: false,
+        },
+        selectedPart: null,
+        partColors: {}
+      };
+    },
     mounted() {
       this.initThreeJS();
     },
@@ -19,14 +135,14 @@
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(
           75,
-          this.$refs.threeCanvas.clientWidth / this.$refs.threeCanvas.clientHeight,
+          this.$refs.threeCanvas.offsetWidth / this.$refs.threeCanvas.offsetHeight,
           0.1,
           1000
         );
         const renderer = new THREE.WebGLRenderer();
         renderer.setSize(
-          this.$refs.threeCanvas.clientWidth,
-          this.$refs.threeCanvas.clientHeight
+          this.$refs.threeCanvas.offsetWidth,
+          this.$refs.threeCanvas.offsetHeight
         );
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -78,7 +194,8 @@
             model.traverse((child) => {
                 if (child.isMesh && child.material) {
                     child.material = new THREE.MeshStandardMaterial({
-                        color: 0xffffff
+                        color: 0xffffff,
+                        emissive: 0x000000,
                     });
                     child.material.needsUpdate = true;
                     child.castShadow = true;
@@ -95,12 +212,17 @@
         camera.position.set(0, 1, 5);
         camera.lookAt(0, 0, 0);
   
+        // Animation
         const animate = () => {
           requestAnimationFrame(animate);
           controls.update();
           renderer.render(scene, camera);
         };
         animate();
+      },
+
+      toggle(option) {
+        this.toggles[option] = !this.toggles[option];
       },
     },
   };
@@ -110,7 +232,47 @@
   .three-canvas {
     width: 100%;
     height: 100vh;
-    overflow: hidden;
+    position: relative;
+    background: black;
+  }
+  
+  .ui-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 8px;
+    width: 250px;
+  }
+  
+  .part-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .part-item {
+    color: white;
+    padding: 8px 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border: 1px solid #555;
+    border-radius: 5px;
+  }
+  
+  .part-item.active {
+    background-color: green;
+    color: black;
+  }
+  
+  .color-picker {
+    margin-top: 20px;
+  }
+  
+  .color-input {
+    margin-top: 10px;
+    width: 100%;
   }
   </style>
   

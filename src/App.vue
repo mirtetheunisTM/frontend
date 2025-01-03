@@ -1,6 +1,7 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import Header from './components/Header.vue';
+import HeaderShop from './components/HeaderShop.vue';
 
 const route = useRoute();
 
@@ -9,6 +10,7 @@ const route = useRoute();
 <template>
   <div>
     <Header v-if="route.path !== '/login' && route.path !== '/shop'" />
+    <HeaderShop v-if="route.path === '/shop'" />
     <router-view />
   </div>
 </template>
