@@ -37,10 +37,22 @@
         controls.enableZoom = true;
   
         // Lighting
-        const light = new THREE.DirectionalLight(0xffffff, 3); 
-        light.position.set(10, 10, 10); // Position the light
-        light.castShadow = true;
-        scene.add(light);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const directionalLight1 = new THREE.DirectionalLight(0xffffff, 1.5);
+        directionalLight1.position.set(10, 10, 10);
+        directionalLight1.castShadow = true;
+        scene.add(directionalLight1);
+
+        const directionalLight2 = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight2.position.set(-10, 10, -10);
+        directionalLight2.castShadow = true;
+        scene.add(directionalLight2);
+
+        const pointLight = new THREE.PointLight(0xffffff, 0.8);
+        pointLight.position.set(0, 5, 0);
+        scene.add(pointLight);
   
         // Load model
         const gltfLoader = new GLTFLoader();
@@ -70,14 +82,7 @@
           
         );
 
-        /* Ground plane
-        const planeGeometry = new THREE.PlaneGeometry(10, 10);
-        const planeMaterial = new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
-        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane.rotation.x = -Math.PI / 2; 
-        scene.add(plane); */
-
-  
+        // Camera
         camera.position.set(0, 1, 5);
         camera.lookAt(0, 0, 0);
   
