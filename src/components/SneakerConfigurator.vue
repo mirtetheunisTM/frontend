@@ -233,10 +233,12 @@
           if (intersects.length > 0) {
             const firstIntersect = intersects[0];
             if (this.updatableParts.includes(firstIntersect.object.name)) {
+              this.currentIntersect = firstIntersect;
+              console.log("currentIntersect: " + this.currentIntersect.object.name);
               if (currentPart !== firstIntersect.object) {
                 // Reset the previous part's outline
                 if (currentPart) {
-                  currentPart.material.emissive.set(0x000000); // Reset emissive color
+                  currentPart.material.emissive.set(0x000000);
                 }
 
                 currentPart = firstIntersect.object;
@@ -249,10 +251,10 @@
             if (currentPart) {
               currentPart.material.emissive.set(0x000000);
               currentPart = null;
+              this.currentIntersect = null;
             }
           }
       });
-
   
         // Animation
         const animate = () => {
@@ -273,6 +275,16 @@
 
       getPartMaterial(partName) {
         return this.partMaterials[partName] || null;
+      },
+
+      selectColor(selectedColor) {
+        if(this.currentIntersect && this.updatableParts.includes(this.currentIntersect.object.name)) {
+          const material = this.currentIntersect.object.material;
+          if (material && material.color) {
+            material.color.set(selectedColor);
+            this.partColors[this.currentIntersect.object.name] = material.color.getHex();
+          }
+        }
       },
     },
   };
