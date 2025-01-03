@@ -42,12 +42,13 @@
 
         <!-- Name Input -->
         <div class="mb-6">
-          <p class="font-semibold mb-3">Give it a name</p>
+          <p class="font-semibold mb-3">Give it a name (max. 7 letters)</p>
           <input
             id="shoeName"
             type="text"
             placeholder="Enter name"
             class="w-full py-2 px-4 rounded-3xl bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-customGreen"
+            maxlength="7"
           />
         </div>
 
@@ -57,6 +58,7 @@
           <div class="flex items-center justify-between mb-4">
             <span>Rotate shoe</span>
             <button
+              id="rotateShoe"
               class="w-14 h-8 bg-gray-700 rounded-full flex items-center justify-start p-1"
               :class="{'justify-end': toggles.rotateShoe}"
               @click="toggle('rotateShoe')"
@@ -67,6 +69,7 @@
           <div class="flex items-center justify-between">
             <span>Skateboard</span>
             <button
+              id="skateboard"
               class="w-14 h-8 bg-gray-700 rounded-full flex items-center justify-start p-1"
               :class="{'justify-end': toggles.skateboard}"
               @click="toggle('skateboard')"
@@ -94,6 +97,7 @@
   import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
   import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
   import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+  import gsap from 'gsap';
 
   
   export default {
@@ -174,6 +178,9 @@
         directionalLight.shadow.camera.bottom = -10;
         scene.add(directionalLight);
 
+        // Create group for rotating
+        const rotateGroup = new THREE.Group();
+
         // Pedestal
         const pedestalGeometry = new THREE.BoxGeometry(3, 1.5, 5);
         const pedestalMaterial = new THREE.MeshStandardMaterial({
@@ -184,6 +191,7 @@
         pedestal.rotation.set(0, -Math.PI / 2, 0);
         pedestal.receiveShadow = true;
         scene.add(pedestal);
+        rotateGroup.add(pedestal);
   
         // Load model
         const gltfLoader = new GLTFLoader();
@@ -212,6 +220,7 @@
             model.position.set(0, 0.75, 0);
             model.rotation.set(0, -Math.PI / 2, 0);
             scene.add(model);
+            rotateGroup.add(model);
           }
           
         );
@@ -292,9 +301,29 @@
               textMesh.position.set(1.1, 1.35, 0.2);
               textMesh.rotation.set(0, Math.PI / 2, 0);
               scene.add(textMesh);
+              rotateGroup.add(textMesh);
             }
           });
         });
+
+        // Add rotation
+        scene.add(rotateGroup);
+        const rotateAnimation = gsap.to(rotateGroup.rotation, {
+          y: 2 * Math.PI,
+          duration: 10,
+          repeat: -1,
+          ease: 'none',
+          paused: true
+        })
+
+        document.getElementById('rotateShoe').addEventListener('click', (event) => {
+          console.log("I'm willing to rotate :)")
+          if (this.toggles['rotateShoe']) {
+            rotateAnimation.play();
+          } else {
+            rotateAnimation.pause();
+          }
+        })
   
         // Animation
         const animate = () => {
