@@ -28,6 +28,8 @@
           this.$refs.threeCanvas.clientWidth,
           this.$refs.threeCanvas.clientHeight
         );
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         this.$refs.threeCanvas.appendChild(renderer.domElement);
 
         // Orbit Controls
@@ -37,22 +39,19 @@
         controls.enableZoom = true;
   
         // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3); // Soft light everywhere
         scene.add(ambientLight);
 
-        const directionalLight1 = new THREE.DirectionalLight(0xffffff, 1.5);
-        directionalLight1.position.set(10, 10, 10);
-        directionalLight1.castShadow = true;
-        scene.add(directionalLight1);
-
-        const directionalLight2 = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight2.position.set(-10, 10, -10);
-        directionalLight2.castShadow = true;
-        scene.add(directionalLight2);
-
-        const pointLight = new THREE.PointLight(0xffffff, 0.8);
-        pointLight.position.set(0, 5, 0);
-        scene.add(pointLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        directionalLight.position.set(5, 10, 5);
+        directionalLight.castShadow = true; 
+        directionalLight.shadow.camera.near = 0.5;
+        directionalLight.shadow.camera.far = 50;
+        directionalLight.shadow.camera.left = -10;
+        directionalLight.shadow.camera.right = 10;
+        directionalLight.shadow.camera.top = 10;
+        directionalLight.shadow.camera.bottom = -10;
+        scene.add(directionalLight);
 
         // Pedestal
         const pedestalGeometry = new THREE.BoxGeometry(3, 1.5, 5);
@@ -98,6 +97,7 @@
   
         const animate = () => {
           requestAnimationFrame(animate);
+          controls.update();
           renderer.render(scene, camera);
         };
         animate();
