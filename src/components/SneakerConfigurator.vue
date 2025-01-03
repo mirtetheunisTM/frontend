@@ -121,8 +121,9 @@
           rotateShoe: false,
           skateboard: false,
         },
-        selectedPart: null,
-        partColors: {}
+        currentIntersect: null,
+        partColors: {},
+        partMaterials: {},
       };
     },
     mounted() {
@@ -213,6 +214,45 @@
         // Camera
         camera.position.set(0, 1, 5);
         camera.lookAt(0, 0, 0);
+
+        // Raycaster and Mouse
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        // Store the current highlighted part
+        let currentPart = null;
+
+        // Event listeners
+        window.addEventListener('click', (event) => {
+          const { left, top, width, height } = this.$refs.threeCanvas.getBoundingClientRect();
+          mouse.x = ((event.clientX - left) / width) * 2 - 1;
+          mouse.y = -((event.clientY - top) / height) * 2 + 1;
+          raycaster.setFromCamera(mouse, camera);
+          const intersects = raycaster.intersectObjects(scene.children, true);
+
+          if (intersects.length > 0) {
+            const firstIntersect = intersects[0];
+            if (this.updatableParts.includes(firstIntersect.object.name)) {
+              if (currentPart !== firstIntersect.object) {
+                // Reset the previous part's outline
+                if (currentPart) {
+                  currentPart.material.emissive.set(0x000000); // Reset emissive color
+                }
+
+                currentPart = firstIntersect.object;
+                console.log("Part clicked: " + currentPart.name);
+                currentPart.material.emissive.set(0x00ff00); 
+              }
+            }
+          } else {
+            // Remove higlight
+            if (currentPart) {
+              currentPart.material.emissive.set(0x000000);
+              currentPart = null;
+            }
+          }
+      });
+
   
         // Animation
         const animate = () => {
@@ -226,55 +266,19 @@
       toggle(option) {
         this.toggles[option] = !this.toggles[option];
       },
+
+      getPartColor(partName) {
+        return this.partColors[partName] || 0xffffff;
+      },
+
+      getPartMaterial(partName) {
+        return this.partMaterials[partName] || null;
+      },
     },
   };
   </script>
   
   <style scoped>
-  .three-canvas {
-    width: 100%;
-    height: 100vh;
-    position: relative;
-    background: black;
-  }
-  
-  .ui-container {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background: rgba(0, 0, 0, 0.7);
-    padding: 20px;
-    border-radius: 8px;
-    width: 250px;
-  }
-  
-  .part-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .part-item {
-    color: white;
-    padding: 8px 10px;
-    margin-bottom: 5px;
-    cursor: pointer;
-    border: 1px solid #555;
-    border-radius: 5px;
-  }
-  
-  .part-item.active {
-    background-color: green;
-    color: black;
-  }
-  
-  .color-picker {
-    margin-top: 20px;
-  }
-  
-  .color-input {
-    margin-top: 10px;
-    width: 100%;
-  }
+
   </style>
   
