@@ -13,7 +13,7 @@ import Order from './components/Order.vue'
 const routes = [
     {
         path: '/',
-        redirect: '/login',
+        redirect: '/shop',
     },    
     { path: '/login', component: Login},
     { path: '/dashboard', component: OrderList },
