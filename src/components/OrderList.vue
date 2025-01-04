@@ -61,7 +61,7 @@ function goToOrderDetails(orderId) {
         <div>
           <p class="mb-1 text-customGreen text-2xl font-semibold">{{ order.name }}</p>
           <p class="mb-3 text-sm text-gray-400">{{ order.date }}</p>
-          <p class="text-md text-white">{{ order.items.length }} items - {{ order.status }}</p>
+          <p class="text-md text-white">{{ order.status }} - €{{ order.totalPrice }}</p>
         </div>
         <div 
           class="w-8 h-8 flex justify-center items-center cursor-pointer"

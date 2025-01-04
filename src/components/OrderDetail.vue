@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const order = ref(null);
@@ -7,6 +7,7 @@ const error = ref('');
 const loading = ref(true);
 // const newStatus = ref('');
 const selectedStatus = ref('');
+const partsWithValues = reactive({});
 const statusOptions = ['in productie', 'verzonden', 'geleverd', 'geannuleerd', 'teruggestuurd'];
 
 const route = useRoute();
@@ -40,6 +41,15 @@ onMounted(async () => {
       date: formatDate(data.data.order.date),
     };
     selectedStatus.value = data.data.order.status;
+
+    const shoeChar = order.value.product;
+    const parts = ['inside', 'laces', 'outside_1', 'outside_2', 'outside_3', 'sole_bottom', 'sole_top'];
+
+    partsWithValues.value = parts.reduce((acc, part) => {
+      acc[part] = shoeChar[part] || 'ffffff';
+      return acc;
+    }, {});
+
   } catch (err) {
     error.value = err.message;
   } finally {
@@ -79,7 +89,7 @@ onMounted(async () => {
     if (!response.ok) {
       throw new Error('Failed to delete order.');
     }
-    router.push('/');
+    router.push('/dashboard');
   } catch (err) {
     alert(err.message);
   }
@@ -102,17 +112,17 @@ console.log(order);
       <div>
         <!-- Order ID and Date -->
         <div class="mb-20">
-          <h2 class="mb-4 text-customGreen font-bold text-2xl">Order ID: {{ order?._id || 'XX'}}</h2>
-          <p class="text-gray-400 text-sm">{{ order?.date || 'XX' }}</p>
+          <h2 class="mb-4 text-customGreen font-bold text-2xl">Order ID: {{ order?._id || 'ID unknown'}}</h2>
+          <p class="text-gray-400 text-sm">{{ order?.date || 'Date unknown' }}</p>
         </div>
 
         <!-- Customer Details -->
         <div class="mb-20">
           <h3 class="text-customGreen font-bold text-2xl">Customer Details</h3>
-          <p class="mt-4 mb-2"><strong>Name:</strong> {{ order?.name || 'XX' }}</p>
-          <p class="mb-2"><strong>Email:</strong> {{ order?.email || 'XX' }}</p>
+          <p class="mt-4 mb-2"><strong>Name:</strong> {{ order?.name || 'Name unknown' }}</p>
+          <p class="mb-2"><strong>Email:</strong> {{ order?.email || 'Email unknown' }}</p>
           <p>
-            <strong>Address:</strong> {{ order?.address || 'XX' }}, {{ order?.city || 'XX' }}, {{ order?.state || 'XX-' }}
+            <strong>Address:</strong> {{ order?.address || 'Address unknown' }}, {{ order?.country || 'Country unknown' }}
           </p>
         </div>
 
@@ -141,7 +151,7 @@ console.log(order);
           </div>
 
           <!-- Back Button -->
-          <div class="mt-10 flex justify-start">
+          <div class="flex justify-start">
             <button
               @click="router.push('/dashboard')"
               class="flex items-center mt-24 px-4 py-2 border border-gray-400 text-gray-400 rounded-3xl hover:bg-customGreen hover:text-black transition hover:border-customGreen"
@@ -169,27 +179,23 @@ console.log(order);
       <!-- Right Column -->
       <div>
         <!-- Products -->
-        <div class="mb-6">
-          <h3 class="text-customGreen font-bold text-2xl">Products</h3>
+        <div class="mb-6 bg-customGray p-6 rounded-3xl">
+          <h3 class="text-customGreen font-bold text-2xl mb-8">Product</h3>
            <div
-            v-for="item in order.items"
-            class="bg-customGray p-4 rounded-3xl shadow-lg mt-8"
+            v-for="(value, part) in partsWithValues.value"
+            :key="part"
+            class="mb-2"
           >
-            <h4 class="font-bold text-white text-lg">{{ item.name }}</h4>
-            <p class="text-gray-400 text-sm mt-1">Color laces: (placeholder)</p>
-            <p class="text-gray-400 text-sm mt-1">Color inside: (placeholder)</p>
-            <p class="text-gray-400 text-sm mt-1">Color outside: (placeholder)</p>
-            <p class="text-gray-400 text-sm mt-1">Material: (placeholder)</p>
-            <p class="text-gray-400 text-sm mt-1">Text: (placeholder)</p>
-            <p class="text-white font-bold text-right mt-4">€{{ item.price }}</p>
+            <span>{{  part.replace('_', ' ') }}: {{ value }}</span>
           </div>
+          <p class="flex justify-end mt-10 text-lg"><strong>€ {{ order?.totalPrice || 'Total unknown' }}</strong></p>
         </div> 
 
         <!-- Delete Order Button -->
-        <div class="mt-6 flex justify-end">
+        <div class="mt-32 flex justify-end">
           <button
             @click="deleteOrder"
-            class="mt-20 bg-red-800 text-white px-4 py-2 rounded-3xl w-15 hover:bg-red-700"
+            class="mt-5 bg-red-800 text-white px-4 py-2 rounded-3xl w-15 hover:bg-red-700"
           >
             Delete Order
           </button>
