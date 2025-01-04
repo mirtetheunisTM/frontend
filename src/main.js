@@ -21,7 +21,7 @@ const routes = [
     { path: '/change-password', component: ChangePassword },
     { path: '/profile', component: ProfilePage},
     { path: '/shop', component: SneakerConfigurator},
-    { path: '/order', component: Order}
+    { path: '/order', name: 'Order', component: Order}
 ]
 
 const router = createRouter({

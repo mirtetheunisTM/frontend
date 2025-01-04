@@ -10,7 +10,7 @@ const route = useRoute();
 <template>
   <div>
     <Header v-if="route.path !== '/login' && route.path !== '/shop'" />
-    <HeaderShop v-if="route.path === '/shop'" />
+    <HeaderShop v-if="route.path === '/shop' && route.path === '/order'" />
     <router-view />
   </div>
 </template>

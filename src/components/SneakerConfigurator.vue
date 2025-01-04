@@ -27,7 +27,8 @@
 
         <!-- Material Options -->
         <div class="mb-6">
-          <p class="font-semibold mb-3">Choose a material</p>
+          <p class="font-semibold">Choose a material</p>
+          <p class="text-sm text-gray-500 mb-3">Adding leather or suede to a part will add €1 to the price.</p>
           <div class="flex flex-col gap-4">
             <button
               v-for="(material, index) in materials"
@@ -109,6 +110,7 @@
   import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
   import gsap from 'gsap';
   import { useRouter } from 'vue-router';
+  import { toRaw } from "vue";
   
   export default {
     name: "SneakerConfigurator",
@@ -462,13 +464,9 @@
      },
 
      orderShoe() {
-      this.$router.push({
-        path: '/order',
-        query: {
-          materials: JSON.stringify(this.partMaterials),
-          colors: JSON.stringify(this.partColors),
-        }
-      });
+       localStorage.setItem('materials', JSON.stringify(this.partMaterials));
+       localStorage.setItem('colors', JSON.stringify(this.partColors));
+       this.$router.push('/order');
      },
     },
   };
