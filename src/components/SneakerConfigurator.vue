@@ -400,11 +400,12 @@
           if (this.partMaterials[this.currentIntersect.object.name] && ["whiteFabric", "blackFabric", "leather", "suede"].includes(this.partMaterials[this.currentIntersect.object.name])) {
             material.map = null; // Remove the texture
             material.needsUpdate = true;
+            this.partMaterials[this.currentIntersect.object.name] = null;
           }
 
           if (material && material.color) {
             material.color.set(selectedColor);
-            this.partColors[this.currentIntersect.object.name] = material.color.getHex();
+            this.partColors[this.currentIntersect.object.name] = material.color.getHexString();
           }
         }
       },
@@ -442,6 +443,7 @@
           const currentMaterial = this.currentIntersect.object.material;
           if (currentMaterial && currentMaterial.color) {
             currentMaterial.color.set(0xffffff);
+            this.partColors[this.currentIntersect.object.name] = "0xffffff";
           }
 
           const texture = textureLoader.load(texturePath);
@@ -450,7 +452,8 @@
           this.currentIntersect.object.material = newMaterial;
           this.partMaterials[this.currentIntersect.object.name] = materialLabel;
 
-          console.log(`Applied ${materialLabel} material to ${this.currentIntersect.object.name}`);
+          console.log(this.partMaterials);
+          console.log(this.partColors);
         }
      },
     },
