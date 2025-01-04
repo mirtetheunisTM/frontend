@@ -91,6 +91,7 @@
         <!-- Order Button -->
         <button
           class="w-full mt-4 py-2 px-4 bg-customGreen rounded-3xl text-black font-bold hover:bg-green-600"
+          @click="orderShoe"
         >
           Order
         </button>
@@ -107,10 +108,16 @@
   import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
   import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
   import gsap from 'gsap';
-
+  import { useRouter } from 'vue-router';
   
   export default {
     name: "SneakerConfigurator",
+    setup() {
+      const router = useRouter();
+      return {
+        router,
+      };
+    },
     data() {
       return {
         updatableParts: [
@@ -451,10 +458,17 @@
 
           this.currentIntersect.object.material = newMaterial;
           this.partMaterials[this.currentIntersect.object.name] = materialLabel;
-
-          console.log(this.partMaterials);
-          console.log(this.partColors);
         }
+     },
+
+     orderShoe() {
+      this.$router.push({
+        path: '/order',
+        query: {
+          materials: JSON.stringify(this.partMaterials),
+          colors: JSON.stringify(this.partColors),
+        }
+      });
      },
     },
   };
