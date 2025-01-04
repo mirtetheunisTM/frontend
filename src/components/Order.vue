@@ -57,17 +57,36 @@ const country = ref('');
 // Submit order
 const shoeCharJSON = JSON.stringify(shoeChar);
 
-const orderShoe = () => {
+const orderShoe = async () => {
     const orderData = {
         name: name.value + ' ' + lastName.value,
         email: email.value,
         address: street.value + ' ' + houseNumber.value + ' - ' + zipCode.value + ' ' + city.value,
         country: country.value,
-        shoeCharJSON, 
-        totalPrice
+        product: shoeCharJSON, 
+        totalPrice: totalPrice.value
     };
     
-    console.log('Order Data:', orderData);
+    try {
+        const response = await fetch('http://localhost:3000/api/v1/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + localStorage.getItem('token')
+            },
+            body: JSON.stringify(orderData),
+        });
+
+        if (response.ok) {
+            console.log("Order submitted successfully!");
+        } else {
+            console.error("Failed to submit order:", response.statusText);
+        }
+    } catch (err) {
+        error.value = err.message;
+    } finally {
+        loading.value = false;
+    }
 };
 
 function goBack() {
