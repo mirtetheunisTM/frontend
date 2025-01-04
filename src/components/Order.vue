@@ -63,8 +63,8 @@ const orderShoe = async () => {
         email: email.value,
         address: street.value + ' ' + houseNumber.value + ' - ' + zipCode.value + ' ' + city.value,
         country: country.value,
-        product: shoeCharJSON, 
-        totalPrice: totalPrice.value
+        product: shoeChar, 
+        totalPrice: totalPrice
     };
     
     try {
