@@ -290,6 +290,7 @@
 
             if (textMesh) {
               scene.remove(textMesh);
+              rotateGroup.remove(textMesh);
               textMesh.geometry.dispose();
               textMesh.material.dispose();
               textMesh = null;
