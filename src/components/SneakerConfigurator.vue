@@ -79,9 +79,18 @@
           </div>
         </div>
 
+        <!-- Take Snaphot Button -->
+        <button
+          id="takeSnapshot"
+          class="w-full mt-8 py-2 px-4 bg-gray-700 rounded-3xl font-bold hover:text-black hover:bg-customGreen transition duration-300"
+          @click="takeSnapshot"
+        >
+          Download your shoe
+        </button>
+
         <!-- Order Button -->
         <button
-          class="w-full mt-8 py-2 px-4 bg-customGreen rounded-3xl text-black font-bold hover:bg-green-600"
+          class="w-full mt-4 py-2 px-4 bg-customGreen rounded-3xl text-black font-bold hover:bg-green-600"
         >
           Order
         </button>
@@ -347,8 +356,6 @@
             }
           })
         });
-
-        
   
         // Animation
         const animate = () => {
@@ -357,6 +364,20 @@
           renderer.render(scene, camera);
         };
         animate();
+
+        // Take Snapshot
+        const takeSnapshot = () => {
+          renderer.render(scene, camera);
+          const dataURL = renderer.domElement.toDataURL('image/png');
+          const link = document.createElement('a');
+          link.href = dataURL;
+          link.download = 'sneaker.png';
+          link.click();
+        }
+
+        document.getElementById('takeSnapshot').addEventListener('click', (event) => {
+          takeSnapshot();
+        });
       },
 
       toggle(option) {
