@@ -27,7 +27,7 @@ onMounted(async () => {
   console.log("onMounted");
   try {
     console.log("Route param: " + route.params.id);
-    const response = await fetch(`http://localhost:3000/api/v1/orders/${route.params.id}`, {
+    const response = await fetch(`https://backend-lc9k.onrender.com/api/v1/orders/${route.params.id}`, {
       'headers': {
         'Authorization': "Bearer " + localStorage.getItem('token')
       }
@@ -59,7 +59,7 @@ onMounted(async () => {
 
  async function updateOrderStatus() {
   try {
-    const response = await fetch(`http://localhost:3000/api/v1/orders/${order.value._id}`, {
+    const response = await fetch(`https://backend-lc9k.onrender.com/api/v1/orders/${order.value._id}`, {
       method: 'PUT',
       headers: { 
         'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ onMounted(async () => {
 
  async function deleteOrder() {
   try {
-    const response = await fetch(`http://localhost:3000/api/v1/orders/${order.value._id}`, {
+    const response = await fetch(`https://backend-lc9k.onrender.com/api/v1/orders/${order.value._id}`, {
       method: 'DELETE',
       'headers': {
         'Authorization': "Bearer " + localStorage.getItem('token')

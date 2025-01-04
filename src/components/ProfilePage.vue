@@ -10,7 +10,7 @@ function changePassword() {
 function logout() {
     const token = localStorage.getItem('token');
 
-    fetch('http://localhost:3000/users/logout', {
+    fetch('https://backend-lc9k.onrender.com/users/logout', {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,

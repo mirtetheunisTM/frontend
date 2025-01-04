@@ -68,7 +68,7 @@ const orderShoe = async () => {
     };
     
     try {
-        const response = await fetch('http://localhost:3000/api/v1/orders', {
+        const response = await fetch('https://backend-lc9k.onrender.com/api/v1/orders', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

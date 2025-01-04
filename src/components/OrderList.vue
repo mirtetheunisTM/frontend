@@ -18,7 +18,7 @@ function formatDate(dateString) {
 
 onMounted(async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/v1/orders', {
+    const response = await fetch('https://backend-lc9k.onrender.com/api/v1/orders', {
       headers: {
         Authorization: "Bearer " + localStorage.getItem('token')
       }
