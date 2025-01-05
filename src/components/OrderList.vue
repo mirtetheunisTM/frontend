@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const orders = ref([]);
@@ -7,6 +7,8 @@ const totalOrders = ref(0);
 const loading = ref(true);
 const error = ref('');
 const router = useRouter();
+
+let primus;
 
 function formatDate(dateString) {
   const date = new Date(dateString);
@@ -18,7 +20,7 @@ function formatDate(dateString) {
 
 onMounted(async () => {
   try {
-    const response = await fetch('https://backend-lc9k.onrender.com/api/v1/orders', {
+    const response = await fetch('https://backend-lc9k.onrender.com/api/v1/orders' /*'http://localhost:3000/api/v1/orders'*/, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem('token')
       }
@@ -37,7 +39,39 @@ onMounted(async () => {
   } finally {
     loading.value = false;
   }
+
+  primus = new Primus('https://backend-lc9k.onrender.com/');
+  primus.on('data', (message) => {
+    switch (message.event) {
+      case 'order-added':
+        orders.value.push({
+          ...message.data,
+          date: formatDate(message.data.date),
+        });
+        totalOrders.value += 1;
+        break;
+      case 'order-deleted':
+        orders.value = orders.value.filter(order => order._id !== message.data.orderId);
+        totalOrders.value -= 1;
+        break;
+      case 'order-updated':
+        const index = orders.value.findIndex(order => order._id === message.data._id);
+        if (index !== -1) {
+          orders.value[index] = {
+            ...message.data,
+            date: formatDate(message.data.date),
+          };
+        }
+        break;
+    }
+  });
 });
+
+onUnmounted(() => {
+  if (primus) {
+    primus.end();
+  }
+})
 
 function goToOrderDetails(orderId) {
   router.push({ name: 'OrderDetail', params: { id: orderId } });

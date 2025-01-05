@@ -11,7 +11,7 @@ async function login() {
     error.value = '';
 
     try {
-        const response = await fetch('https://backend-lc9k.onrender.com/users/login', {
+        const response = await fetch('https://backend-lc9k.onrender.com/users/login' /*'http://localhost:3000/users/login'*/, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
