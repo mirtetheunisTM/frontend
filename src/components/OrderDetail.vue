@@ -47,7 +47,7 @@ onMounted(async () => {
 
     partsWithValues.value = parts.reduce((acc, part) => {
       if (part === 'custom_text') {
-        acc[part] = shoeChar[part] || 'No text';
+        acc[part] = shoeChar[part] || 'no text';
       } else {
       acc[part] = shoeChar[part] || 'ffffff'; 
       }

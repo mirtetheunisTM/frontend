@@ -34,6 +34,29 @@ router.beforeEach((to, from, next) => {
     next();
   });
 
+// Primus
+// Initialize Primus connection
+const primus = new Primus('ws://localhost:3001');
+
+// Listen for the connection to open
+primus.on('open', () => {
+    console.log('Connected to server');
+});
+
+// Listen for incoming messages
+primus.on('data', (data) => {
+    console.log('Received data from server:', data);
+
+    // Example: Update UI with received data
+    // You can parse and update your sneaker parts or 3D model here
+});
+
+// Send data to the server
+function sendDataToServer(data) {
+    primus.write(data); // This sends data to the server
+}
+
+
 const app = createApp(App)
 app.use(router)
 app.mount('#app')
