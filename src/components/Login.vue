@@ -25,7 +25,6 @@ async function login() {
         const data = await response.json();
 
         if (response.ok) {
-            alert('Login successful!');
             let token = data.data.token;
             localStorage.setItem('token', token);
             router.push('/dashboard');

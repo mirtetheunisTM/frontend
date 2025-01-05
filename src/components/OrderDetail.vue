@@ -10,6 +10,10 @@ const selectedStatus = ref('');
 const partsWithValues = reactive({});
 const statusOptions = ['in productie', 'verzonden', 'geleverd', 'geannuleerd', 'teruggestuurd'];
 
+const showConfirm = ref(false);
+const currentAction = ref('');
+const currentOrder = ref(null);
+
 const route = useRoute();
 const router = useRouter();
 
@@ -22,6 +26,25 @@ const router = useRouter();
   const minutes = String(date.getMinutes()).padStart(2, '0');
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 } 
+
+function askConfirmation(action, order) {
+  currentAction.value = action;
+  currentOrder.value = order;
+  showConfirm.value = true;
+}
+
+function handleConfirmation(action) {
+  if (action === 'delete') {
+    deleteOrder();
+  } else if (action === 'update') {
+    updateOrderStatus();
+  }
+  showConfirm.value = false;
+}
+
+function handleCancel() {
+  showConfirm.value = false;
+}
 
 onMounted(async () => {
   console.log("onMounted");
@@ -111,6 +134,7 @@ console.log(order);
     <div v-else-if="error" class="text-center text-red-500 text-xl">
       {{ error }}
     </div>
+
     <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl w-full mt-10">
       <!-- Left Column -->
       <div>
@@ -147,7 +171,7 @@ console.log(order);
               </option>
             </select>
             <button
-              @click="updateOrderStatus"
+              @click="askConfirmation('update', order)"
               class="bg-customGreen text-black px-4 py-2 rounded-3xl"
             >
               Update
@@ -198,10 +222,29 @@ console.log(order);
         <!-- Delete Order Button -->
         <div class="mt-32 flex justify-end">
           <button
-            @click="deleteOrder"
+            @click="askConfirmation('delete', order)"
             class="mt-5 bg-red-800 text-white px-4 py-2 rounded-3xl w-15 hover:bg-red-700"
           >
             Delete Order
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div v-if="showConfirm" class="fixed inset-0 flex justify-center items-center backdrop-blur-sm bg-customGray bg-opacity-50">
+      <div class="bg-white p-5 rounded-3xl">
+        <p class="text-lg mb-8 text-black">Are you sure you want to {{ currentAction }} this order?</p>
+        <div class="flex justify-center gap-8">
+          <button 
+            class="bg-customGreen mb-4 text-black px-8 py-2 rounded-3xl"
+            @click="handleConfirmation(currentAction)">
+            Yes
+          </button>
+          <button 
+            class="bg-customGray mb-4 text-white px-8 py-2 rounded-3xl"
+            @click="handleCancel">
+            No
           </button>
         </div>
       </div>
