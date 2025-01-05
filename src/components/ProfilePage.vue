@@ -1,7 +1,27 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { ref } from 'vue';
 
 const router = useRouter();
+
+const showConfirm = ref(false);
+const currentAction = ref('');
+
+function askConfirmation(action) {
+  currentAction.value = action;
+  showConfirm.value = true;
+}
+
+function handleConfirmation(action) {
+  if (action === 'logout') {
+    logout();
+  }
+  showConfirm.value = false;
+}
+
+function handleCancel() {
+  showConfirm.value = false;
+}
 
 function changePassword() {
     router.push('/change-password');
@@ -46,17 +66,36 @@ function logout() {
     <!-- Buttons -->
     <div class="flex flex-col items-center mt-40 mb-auto">
       <button 
-        @click="changePassword" 
+        @click="changePassword()" 
         class="mb-8 bg-customGreen text-black px-6 py-3 rounded-3xl text-lg font-semibold hover:bg-green-600 transition"
       >
         Change Password
       </button>
       <button 
-        @click="logout" 
+        @click="askConfirmation('logout')" 
         class="bg-red-800 text-white px-6 py-3 rounded-3xl text-lg font-semibold hover:bg-red-700 transition"
       >
         Logout
       </button>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div v-if="showConfirm" class="fixed inset-0 flex justify-center items-center backdrop-blur-sm bg-customGray bg-opacity-50">
+      <div class="bg-white p-5 rounded-3xl">
+        <p class="text-lg mb-8 text-black">Are you sure you want to {{ currentAction }}?</p>
+        <div class="flex justify-center gap-8">
+          <button 
+            class="bg-customGreen mb-4 text-black px-8 py-2 rounded-3xl"
+            @click="handleConfirmation(currentAction)">
+            Yes
+          </button>
+          <button 
+            class="bg-customGray mb-4 text-white px-8 py-2 rounded-3xl"
+            @click="handleCancel">
+            No
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
