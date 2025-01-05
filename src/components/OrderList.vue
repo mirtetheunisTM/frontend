@@ -6,6 +6,12 @@ const orders = ref([]);
 const totalOrders = ref(0);
 const loading = ref(true);
 const error = ref('');
+const filters = ref({
+  name: '',
+  status: '',
+  sort: '',
+  order: 'asc'
+});
 const router = useRouter();
 
 let primus;
@@ -16,6 +22,39 @@ function formatDate(dateString) {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+}
+
+async function fetchOrders() {
+  try {
+    loading.value = true;
+    const { name, status, sort, order } = filters.value;
+
+    // Build query string with filters and sorting
+    let query = `?sort=${sort}&order=${order}`;
+    if (name) query += `&name=${name}`;
+    if (status) query += `&status=${status}`;
+
+    const response = await fetch(`https://backend-lc9k.onrender.com/api/v1/orders${query}`, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem('token')
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    orders.value = data.data.orders.map(order => ({
+      ...order,
+      date: formatDate(order.date),
+    }));
+    totalOrders.value = orders.value.length;
+  } catch (err) {
+    error.value = err.message;
+  } finally {
+    loading.value = false;
+  }
 }
 
 onMounted(async () => {
@@ -81,6 +120,36 @@ function goToOrderDetails(orderId) {
 <template>
   <div class="bg-black text-white min-h-screen flex flex-col items-center py-10">
       <h1 class="w-full max-w-5xl mb-20 text-center text-customGreen text-4xl font-bold">Dashboard</h1>
+
+      <!-- Filtering and Sorting Controls -->
+      <div class="flex space-x-4 mb-6">
+        <select v-model="filters.name" @change="fetchOrders" class="bg-customGray text-white p-2 rounded-3xl">
+          <option value="">Filter by Name</option>
+          <option v-for="order in orders" :key="order._id" :value="order.name">{{ order.name }}</option>
+        </select>
+        
+        <select v-model="filters.status" @change="fetchOrders" class="bg-customGray text-white p-2 rounded-3xl">
+          <option value="">Filter by Status</option>
+          <option value="in productie">In productie</option>
+          <option value="verzonden">Verzonden</option>
+          <option value="geleverd">Geleverd</option>
+          <option value="geannuleerd">Geannuleerd</option>
+          <option value="teruggestuurd">Teruggestuurd</option>
+        </select>
+
+        <select v-model="filters.sort" @change="fetchOrders" class="bg-customGray text-white p-2 rounded-3xl">
+          <option value="">Sort by</option>
+          <option value="name">Sort by Name</option>
+          <option value="date">Sort by Date</option>
+        </select>
+
+        
+        <select v-model="filters.order" @change="fetchOrders" class="bg-customGray text-white p-2 rounded-3xl">
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </div>
+
       <p class="w-full max-w-5xl mb-6 text-right text-gray-400 text-lg">Total amount orders: {{ totalOrders }}</p>
 
     <div v-if="loading" class="text-center text-lg">Loading...</div>
