@@ -6,12 +6,15 @@ const router = useRouter();
 
 const partMaterials = JSON.parse(localStorage.getItem('materials'));
 const partColors = JSON.parse(localStorage.getItem('colors'));
+const textShoe = localStorage.getItem('text');
 
 localStorage.removeItem('materials');
 localStorage.removeItem('colors');
+localStorage.removeItem('text');
 
 // Add custom properties
 const shoeChar = {};
+shoeChar['custom_text'] = textShoe;
 
 for (const part in partMaterials) {
     const material = partMaterials[part]; 

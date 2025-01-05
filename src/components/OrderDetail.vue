@@ -43,10 +43,14 @@ onMounted(async () => {
     selectedStatus.value = data.data.order.status;
 
     const shoeChar = order.value.product;
-    const parts = ['inside', 'laces', 'outside_1', 'outside_2', 'outside_3', 'sole_bottom', 'sole_top'];
+    const parts = ['inside', 'laces', 'outside_1', 'outside_2', 'outside_3', 'sole_bottom', 'sole_top', 'custom_text'];
 
     partsWithValues.value = parts.reduce((acc, part) => {
-      acc[part] = shoeChar[part] || 'ffffff';
+      if (part === 'custom_text') {
+        acc[part] = shoeChar[part] || 'No text';
+      } else {
+      acc[part] = shoeChar[part] || 'ffffff'; 
+      }
       return acc;
     }, {});
 

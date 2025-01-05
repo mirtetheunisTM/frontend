@@ -151,6 +151,7 @@
         currentIntersect: null,
         partColors: {},
         partMaterials: {},
+        textShoe: null,
       };
     },
     mounted() {
@@ -303,6 +304,7 @@
               textMesh.geometry.dispose();
               textMesh.material.dispose();
               textMesh = null;
+              this.textShoe = '';
             }
 
             if (shoeName.trim() !== '') {
@@ -319,6 +321,7 @@
 
               textMesh.position.set(1.1, 1.35, 0.2);
               textMesh.rotation.set(0, Math.PI / 2, 0);
+              this.textShoe = shoeName;
               scene.add(textMesh);
               rotateGroup.add(textMesh);
             }
@@ -466,6 +469,8 @@
      orderShoe() {
        localStorage.setItem('materials', JSON.stringify(this.partMaterials));
        localStorage.setItem('colors', JSON.stringify(this.partColors));
+       localStorage.setItem('text', this.textShoe);
+       console.log(this.textShoe);
        this.$router.push('/order');
      },
     },
