@@ -56,6 +56,16 @@ const houseNumber = ref('');
 const zipCode = ref('');
 const city = ref('');
 const country = ref('');
+const showConfirm = ref(false);
+
+function orderSucceeded() {
+    showConfirm.value = true;
+}
+
+function handleOkay() {
+    showConfirm.value = false;
+    router.push('/');
+}
 
 // Submit order
 const orderShoe = async () => {
@@ -79,9 +89,9 @@ const orderShoe = async () => {
         });
 
         if (response.ok) {
-            console.log("Order submitted successfully!");
+            orderSucceeded();
         } else {
-            console.error("Failed to submit order:", response.statusText);
+            error.value = 'Failed to place order. Please try again.';
         }
     } catch (err) {
         error.value = err.message;
@@ -178,6 +188,19 @@ function goBack() {
           </div>
         </form>
       </div>
+      <!-- Confirmation Modal -->
+        <div v-if="showConfirm" class="fixed inset-0 flex justify-center items-center backdrop-blur-sm bg-customGray bg-opacity-50">
+          <div class="bg-gray-700 py-7 px-14 rounded-3xl">
+            <p class="text-lg mb-8 text-white">Order placed successfully!</p>
+            <div class="flex justify-center gap-8">
+              <button 
+                class="bg-customGreen mb-2 mt-3 text-black px-8 py-2 rounded-3xl"
+                @click="handleOkay()">
+                Go back to the shop
+              </button>
+            </div>
+          </div>
+        </div>
     </div>
   </template>
 

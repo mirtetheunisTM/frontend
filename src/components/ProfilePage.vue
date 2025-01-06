@@ -81,8 +81,8 @@ function logout() {
 
     <!-- Confirmation Modal -->
     <div v-if="showConfirm" class="fixed inset-0 flex justify-center items-center backdrop-blur-sm bg-customGray bg-opacity-50">
-      <div class="bg-white p-5 rounded-3xl">
-        <p class="text-lg mb-8 text-black">Are you sure you want to {{ currentAction }}?</p>
+      <div class="bg-gray-700 py-5 px-10 rounded-3xl">
+        <p class="text-lg mb-8 text-white">Are you sure you want to {{ currentAction }}?</p>
         <div class="flex justify-center gap-8">
           <button 
             class="bg-customGreen mb-4 text-black px-8 py-2 rounded-3xl"
