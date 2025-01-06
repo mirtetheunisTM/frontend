@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 
 const router = useRouter();
+const error = ref('');
 
 const showConfirm = ref(false);
 const currentAction = ref('');
@@ -40,15 +41,13 @@ function logout() {
         .then((data) => {
             if (data.status === 'success') {
                 localStorage.removeItem('token');
-                alert('Logged out successfully');
                 router.push('/login');
             } else {
-                alert('Failed to log out');
+                error.value = 'Failed to log out. Please try again.';
             }
         })
         .catch((err) => {
-            console.error(err);
-            alert('An error occurred while logging out');
+            error.value = 'An error occurred while logging out: ' + err.message;
         });
 }
 </script>
