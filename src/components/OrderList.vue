@@ -83,6 +83,7 @@ onMounted(async () => {
   primus.on('data', (message) => {
     switch (message.event) {
       case 'order-added':
+        console.log(message.data);
         orders.value.push({
           ...message.data,
           date: formatDate(message.data.date),
